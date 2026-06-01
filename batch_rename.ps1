@@ -1,11 +1,11 @@
 <#
 .SYNOPSIS
-    Demo: batch-rename files with sequential numbering + a prefix.
+    Batch-rename a folder of files to a padded, sortable pattern.
 
 .DESCRIPTION
-    Typical client task: hundreds of files named IMG_8842.jpg, scan001.pdf,
-    export(3).csv — rename to a clean, sortable pattern in one pass.
-    Includes -WhatIf so you preview before touching anything.
+    Turns junk like IMG_8842.jpg, scan001.pdf, export(3).csv into
+    product_001.jpg, product_002.pdf, etc. Run with -WhatIf first to see the
+    renames before anything actually changes on disk.
 
 .EXAMPLE
     .\batch_rename.ps1 -Folder ".\photos" -Prefix "product" -WhatIf

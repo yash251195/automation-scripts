@@ -1,20 +1,17 @@
 """
-web_scraper_demo.py — demo: scrape a listing page into clean CSV.
+Scrape a paginated listing into a CSV.
 
-Real client jobs handle pagination, anti-bot headers, and messy markup.
-This demo keeps it small and readable so you can see the approach.
+Hits quotes.toscrape.com (a public sandbox), grabs text/author/tags from every
+page, follows the "next" link until there isn't one, writes quotes.csv.
 
-Usage:
     python web_scraper_demo.py
-Output:
-    quotes.csv  (text, author, tags)
 """
 
 import csv
 import requests
 from bs4 import BeautifulSoup
 
-BASE = "https://quotes.toscrape.com"  # public sandbox site, safe to scrape
+BASE = "https://quotes.toscrape.com"
 
 
 def scrape_page(url):
@@ -30,9 +27,8 @@ def scrape_page(url):
             "tags": ", ".join(t.get_text(strip=True) for t in q.select(".tag")),
         })
 
-    next_link = soup.select_one("li.next a")
-    next_url = BASE + next_link["href"] if next_link else None
-    return rows, next_url
+    nxt = soup.select_one("li.next a")
+    return rows, (BASE + nxt["href"] if nxt else None)
 
 
 def main():

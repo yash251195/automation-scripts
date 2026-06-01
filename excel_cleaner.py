@@ -1,13 +1,10 @@
 """
-excel_cleaner.py — demo: clean a messy spreadsheet.
+Clean up a messy spreadsheet and write a *_cleaned.xlsx next to it.
 
-Typical client mess: duplicate rows, inconsistent casing, stray whitespace,
-blank rows, dates stored as text. This shows the common fixes.
+Drops blank rows, trims and collapses whitespace, normalizes header names,
+title-cases a "name" column if there is one, and removes duplicate rows.
 
-Usage:
     python excel_cleaner.py input.xlsx
-Output:
-    input_cleaned.xlsx
 """
 
 import sys
@@ -15,13 +12,11 @@ import pandas as pd
 
 
 def clean(df):
-    # drop fully-blank rows
     df = df.dropna(how="all")
 
-    # strip whitespace + normalize header names
+    # headers -> lower_snake_case so they're predictable to work with
     df.columns = [str(c).strip().lower().replace(" ", "_") for c in df.columns]
 
-    # trim string cells, collapse inner whitespace
     for col in df.select_dtypes(include="object"):
         df[col] = (
             df[col].astype(str)
@@ -30,11 +25,9 @@ def clean(df):
             .replace({"nan": ""})
         )
 
-    # title-case a 'name' column if present
     if "name" in df.columns:
         df["name"] = df["name"].str.title()
 
-    # drop exact duplicate rows
     before = len(df)
     df = df.drop_duplicates()
     print(f"removed {before - len(df)} duplicate rows")
@@ -48,11 +41,10 @@ def main():
         sys.exit(1)
 
     path = sys.argv[1]
-    df = pd.read_excel(path)
-    cleaned = clean(df)
+    df = clean(pd.read_excel(path))
     out = path.rsplit(".", 1)[0] + "_cleaned.xlsx"
-    cleaned.to_excel(out, index=False)
-    print(f"wrote {out} ({len(cleaned)} rows)")
+    df.to_excel(out, index=False)
+    print(f"wrote {out} ({len(df)} rows)")
 
 
 if __name__ == "__main__":
