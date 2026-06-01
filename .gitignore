@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+*.pyo
+quotes.csv
+*_cleaned.xlsx
+.venv/
+venv/
