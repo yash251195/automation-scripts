@@ -1,6 +1,6 @@
 # Sample work
 
-A few small scripts I reach for on freelance jobs, plus output from a ComfyUI
+A few small scripts I reach for on client jobs, plus output from a ComfyUI
 batch pipeline. These are the trimmed public versions. The paid jobs deal with
 the messier stuff (logins, pagination, odd file formats, bigger volumes).
 
